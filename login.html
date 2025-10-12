@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maktab Oshxona Tizimi - Kirish</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>🏫 Maktab Oshxona Tizimi</h1>
+            <p>Tizimga kirish</p>
+        </div>
+
+        <div id="alert" class="alert alert-error"></div>
+
+        <div class="user-type">
+            <div class="user-option">
+                <i>👨‍💼</i>
+                Xo'jalik Mudiri
+            </div>
+            <div class="user-option">
+                <i>👨‍🍳</i>
+                Oshxona Xodimi
+            </div>
+        </div>
+
+        <form class="login-form">
+            <div class="form-group">
+                <label for="username">Foydalanuvchi nomi:</label>
+                <input type="text" id="username" class="form-control" placeholder="Loginingizni kiriting" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Parol:</label>
+                <div class="password-container">
+                    <input type="password" id="password" class="form-control" placeholder="Parolingizni kiriting" required>
+                    <button type="button" class="password-toggle" onclick="loginUI.togglePasswordVisibility()">
+                        👁️
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <span class="btn-text">Kirish</span>
+            </button>
+        </form>
+
+        <div class="info-text">
+            <h4>Test ma'lumotlari:</h4>
+            <div class="info-list">
+                <li><strong>Xo'jalik Mudiri:</strong> manager / manager123</li>
+                <li><strong>Oshxona Xodimi:</strong> staff / staff123</li>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript fayllari -->
+    <script src="auth.js"></script>
+    <script src="login-ui.js"></script>
+</body>
+</html>
