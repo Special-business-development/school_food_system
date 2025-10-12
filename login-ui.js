@@ -13,9 +13,12 @@ class LoginUI {
     // Eventlarni bog'lash
     bindEvents() {
         // Form submit
-        document.querySelector('.login-form').addEventListener('submit', (e) => {
-            this.handleLogin(e);
-        });
+        const loginForm = document.querySelector('.login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                this.handleLogin(e);
+            });
+        }
 
         // User type selection
         document.querySelectorAll('.user-option').forEach((option, index) => {
@@ -110,6 +113,8 @@ class LoginUI {
     // Xabarlarni ko'rsatish
     showMessage(message, type = 'error') {
         const alert = document.getElementById('alert');
+        if (!alert) return;
+        
         alert.textContent = message;
         alert.className = `alert alert-${type}`;
         alert.style.display = 'block';
@@ -135,13 +140,15 @@ class LoginUI {
     // Loading holatini ko'rsatish
     showLoading(show) {
         const button = document.querySelector('.btn-primary');
-        const originalText = button.textContent;
+        if (!button) return;
+        
+        const originalText = button.querySelector('.btn-text')?.textContent || 'Kirish';
         
         if (show) {
             button.innerHTML = '<div class="spinner"></div> Kirish...';
             button.disabled = true;
         } else {
-            button.textContent = originalText;
+            button.innerHTML = `<span class="btn-text">${originalText}</span>`;
             button.disabled = false;
         }
     }
@@ -149,10 +156,12 @@ class LoginUI {
     // Formni tebratish (error paytida)
     shakeForm() {
         const form = document.querySelector('.login-form');
-        form.style.animation = 'shake 0.5s';
-        setTimeout(() => {
-            form.style.animation = '';
-        }, 500);
+        if (form) {
+            form.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                form.style.animation = '';
+            }, 500);
+        }
     }
 
     // Foydalanuvchi ma'lumotlarini ko'rsatish
@@ -167,8 +176,10 @@ class LoginUI {
     // Parolni ko'rsatish/yashirish
     togglePasswordVisibility() {
         const passwordInput = document.getElementById('password');
-        const type = passwordInput.type === 'password' ? 'text' : 'password';
-        passwordInput.type = type;
+        if (passwordInput) {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+        }
     }
 }
 

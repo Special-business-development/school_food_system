@@ -6,26 +6,29 @@ class AuthManager {
             manager: {
                 username: 'manager',
                 password: 'manager123',
-                redirectUrl: 'https://script.google.com/macros/s/AKfycbw4yUYHuUy9RVmD9G92nu9Ky3-ZcYiTNlvXbNSjC511HQoRLB4gpYvb6caG_8RFbmT5Wg/exec',
+                appScriptUrl: 'https://script.google.com/macros/s/AKfycbw4yUYHuUy9RVmD9G92nu9Ky3-ZcYiTNlvXbNSjC511HQoRLB4gpYvb6caG_8RFbmT5Wg/exec',
                 role: 'manager',
                 displayName: 'Xo\'jalik Mudiri'
             },
             staff: {
                 username: 'staff', 
                 password: 'staff123',
-                redirectUrl: 'https://script.google.com/macros/s/AKfycby2HTCDvY5JLoM_Y2CyxNpzClujaWl573AzaXWJ9J3Kv2ydmRxWeDghhvz8rLEObNwGBg/exec',
+                appScriptUrl: 'https://script.google.com/macros/s/AKfycby2HTCDvY5JLoM_Y2CyxNpzClujaWl573AzaXWJ9J3Kv2ydmRxWeDghhvz8rLEObNwGBg/exec',
                 role: 'staff',
                 displayName: 'Oshxona Xodimi'
             }
         };
         
         this.currentUser = null;
+        this.selectedUserType = 'manager'; // Default
         this.init();
     }
 
     init() {
         // Sessiyani tekshirish
         this.checkExistingSession();
+        // Default user type tanlash
+        this.selectUserType('manager');
     }
 
     // Foydalanuvchi turini tanlash
@@ -41,10 +44,12 @@ class AuthManager {
         
         // Placeholder ni yangilash
         const usernameInput = document.getElementById('username');
-        if (type === 'manager') {
-            usernameInput.placeholder = "Mudir loginingizni kiriting";
-        } else {
-            usernameInput.placeholder = "Xodim loginingizni kiriting";
+        if (usernameInput) {
+            if (type === 'manager') {
+                usernameInput.placeholder = "Mudir loginingizni kiriting";
+            } else {
+                usernameInput.placeholder = "Xodim loginingizni kiriting";
+            }
         }
     }
 
@@ -59,16 +64,17 @@ class AuthManager {
                 username: username,
                 role: credentials.role,
                 displayName: credentials.displayName,
+                appScriptUrl: credentials.appScriptUrl, // App Script URL ni saqlaymiz
                 loginTime: new Date()
             };
             
             // Sessiyani saqlash
             this.saveSession();
             
-            // Redirect qilish
+            // app.html ga yo'naltirish
             return {
                 success: true,
-                redirectUrl: credentials.redirectUrl,
+                redirectUrl: 'app.html',
                 user: this.currentUser
             };
         } else {
@@ -121,6 +127,11 @@ class AuthManager {
         return this.currentUser;
     }
 
+    // App Script URL ni olish
+    getAppScriptUrl() {
+        return this.currentUser?.appScriptUrl || null;
+    }
+
     // Logout qilish
     logout() {
         this.currentUser = null;
@@ -128,7 +139,7 @@ class AuthManager {
         sessionStorage.removeItem('oshxona_session');
         
         // Login sahifasiga qaytish
-        window.location.href = window.location.href;
+        window.location.href = 'index.html';
     }
 
     // Sessiya muddatini tekshirish
