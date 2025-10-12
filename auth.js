@@ -6,69 +6,73 @@ class AuthManager {
             manager: {
                 username: 'manager',
                 password: 'manager123',
-                appScriptUrl: 'https://script.google.com/macros/s/AKfycbw4yUYHuUy9RVmD9G92nu9Ky3-ZcYiTNlvXbNSjC511HQoRLB4gpYvb6caG_8RFbmT5Wg/exec',
+                redirectUrl: 'https://script.google.com/macros/s/AKfycbw4yUYHuUy9RVmD9G92nu9Ky3-ZcYiTNlvXbNSjC511HQoRLB4gpYvb6caG_8RFbmT5Wg/exec',
                 role: 'manager',
                 displayName: 'Xo\'jalik Mudiri'
             },
             staff: {
                 username: 'staff', 
                 password: 'staff123',
-                appScriptUrl: 'https://script.google.com/macros/s/AKfycby2HTCDvY5JLoM_Y2CyxNpzClujaWl573AzaXWJ9J3Kv2ydmRxWeDghhvz8rLEObNwGBg/exec',
+                redirectUrl: 'https://script.google.com/macros/s/AKfycby2HTCDvY5JLoM_Y2CyxNpzClujaWl573AzaXWJ9J3Kv2ydmRxWeDghhvz8rLEObNwGBg/exec',
                 role: 'staff',
                 displayName: 'Oshxona Xodimi'
             }
         };
         
         this.currentUser = null;
-        this.selectedUserType = 'manager';
         this.init();
     }
 
     init() {
+        // Sessiyani tekshirish
         this.checkExistingSession();
-        this.selectUserType('manager');
     }
 
+    // Foydalanuvchi turini tanlash
     selectUserType(type) {
         this.selectedUserType = type;
         
+        // UI ni yangilash
         document.querySelectorAll('.user-option').forEach(option => {
             option.classList.remove('selected');
         });
         
         document.querySelector(`.user-option:nth-child(${type === 'manager' ? 1 : 2})`).classList.add('selected');
         
+        // Placeholder ni yangilash
         const usernameInput = document.getElementById('username');
-        if (usernameInput) {
-            if (type === 'manager') {
-                usernameInput.placeholder = "Mudir loginingizni kiriting";
-            } else {
-                usernameInput.placeholder = "Xodim loginingizni kiriting";
-            }
+        if (type === 'manager') {
+            usernameInput.placeholder = "Mudir loginingizni kiriting";
+        } else {
+            usernameInput.placeholder = "Xodim loginingizni kiriting";
         }
     }
 
+    // Login qilish
     async login(username, password) {
         const credentials = this.userCredentials[this.selectedUserType];
         
         if (username === credentials.username && password === credentials.password) {
+            // Muvaffaqiyatli login
             this.currentUser = {
                 type: this.selectedUserType,
                 username: username,
                 role: credentials.role,
                 displayName: credentials.displayName,
-                appScriptUrl: credentials.appScriptUrl,
                 loginTime: new Date()
             };
             
+            // Sessiyani saqlash
             this.saveSession();
             
+            // Redirect qilish
             return {
                 success: true,
-                redirectUrl: 'app.html',
+                redirectUrl: credentials.redirectUrl,
                 user: this.currentUser
             };
         } else {
+            // Login muvaffaqiyatsiz
             return {
                 success: false,
                 error: 'Noto‘g‘ri login yoki parol!'
@@ -76,6 +80,7 @@ class AuthManager {
         }
     }
 
+    // Sessiyani saqlash
     saveSession() {
         const sessionData = {
             user: this.currentUser,
@@ -86,6 +91,7 @@ class AuthManager {
         sessionStorage.setItem('oshxona_session', JSON.stringify(sessionData));
     }
 
+    // Mavjud sessiyani tekshirish
     checkExistingSession() {
         const sessionData = localStorage.getItem('oshxona_session') || sessionStorage.getItem('oshxona_session');
         
@@ -93,12 +99,13 @@ class AuthManager {
             try {
                 const parsed = JSON.parse(sessionData);
                 const sessionAge = Date.now() - parsed.timestamp;
-                const maxAge = 24 * 60 * 60 * 1000;
+                const maxAge = 24 * 60 * 60 * 1000; // 24 soat
                 
                 if (sessionAge < maxAge) {
                     this.currentUser = parsed.user;
                     return true;
                 } else {
+                    // Sessiya muddati tugagan
                     this.logout();
                 }
             } catch (e) {
@@ -109,25 +116,27 @@ class AuthManager {
         return false;
     }
 
+    // Foydalanuvchi ma'lumotlarini olish
     getCurrentUser() {
         return this.currentUser;
     }
 
-    getAppScriptUrl() {
-        return this.currentUser?.appScriptUrl || null;
-    }
-
+    // Logout qilish
     logout() {
         this.currentUser = null;
         localStorage.removeItem('oshxona_session');
         sessionStorage.removeItem('oshxona_session');
-        window.location.href = 'index.html';
+        
+        // Login sahifasiga qaytish
+        window.location.href = window.location.href;
     }
 
+    // Sessiya muddatini tekshirish
     isSessionValid() {
         return this.currentUser !== null;
     }
 
+    // Foydalanuvchi huquqlarini tekshirish
     hasPermission(requiredRole) {
         if (!this.currentUser) return false;
         
@@ -140,4 +149,5 @@ class AuthManager {
     }
 }
 
+// Global auth instance
 window.authManager = new AuthManager();
