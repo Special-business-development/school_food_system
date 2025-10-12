@@ -10,9 +10,7 @@ class LoginUI {
         this.showUserInfo();
     }
 
-    // Eventlarni bog'lash
     bindEvents() {
-        // Form submit
         const loginForm = document.querySelector('.login-form');
         if (loginForm) {
             loginForm.addEventListener('submit', (e) => {
@@ -20,7 +18,6 @@ class LoginUI {
             });
         }
 
-        // User type selection
         document.querySelectorAll('.user-option').forEach((option, index) => {
             option.addEventListener('click', () => {
                 const type = index === 0 ? 'manager' : 'staff';
@@ -28,7 +25,6 @@ class LoginUI {
             });
         });
 
-        // Input focus/blur effektlari
         document.querySelectorAll('.form-control').forEach(input => {
             input.addEventListener('focus', () => {
                 input.parentElement.classList.add('focused');
@@ -41,7 +37,6 @@ class LoginUI {
             });
         });
 
-        // Enter bosganda login
         document.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.handleLogin(e);
@@ -49,19 +44,16 @@ class LoginUI {
         });
     }
 
-    // Login jarayoni
     async handleLogin(event) {
         event.preventDefault();
         
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
         
-        // Validatsiya
         if (!this.validateInputs(username, password)) {
             return;
         }
 
-        // Loading holatini ko'rsatish
         this.showLoading(true);
 
         try {
@@ -70,7 +62,6 @@ class LoginUI {
             if (result.success) {
                 this.showSuccess('Muvaffaqiyatli kirildi! Yo‘naltirilmoqda...');
                 
-                // 1.5 soniyadan keyin redirect
                 setTimeout(() => {
                     window.location.href = result.redirectUrl;
                 }, 1500);
@@ -87,7 +78,6 @@ class LoginUI {
         }
     }
 
-    // Inputlarni validatsiya qilish
     validateInputs(username, password) {
         if (!username) {
             this.showError('Iltimos, foydalanuvchi nomini kiriting.');
@@ -110,7 +100,6 @@ class LoginUI {
         return true;
     }
 
-    // Xabarlarni ko'rsatish
     showMessage(message, type = 'error') {
         const alert = document.getElementById('alert');
         if (!alert) return;
@@ -119,7 +108,6 @@ class LoginUI {
         alert.className = `alert alert-${type}`;
         alert.style.display = 'block';
 
-        // Avtomatik yashirish
         if (type === 'success') {
             setTimeout(() => {
                 alert.style.display = 'none';
@@ -127,17 +115,14 @@ class LoginUI {
         }
     }
 
-    // Error xabarini ko'rsatish
     showError(message) {
         this.showMessage(message, 'error');
     }
 
-    // Success xabarini ko'rsatish
     showSuccess(message) {
         this.showMessage(message, 'success');
     }
 
-    // Loading holatini ko'rsatish
     showLoading(show) {
         const button = document.querySelector('.btn-primary');
         if (!button) return;
@@ -153,7 +138,6 @@ class LoginUI {
         }
     }
 
-    // Formni tebratish (error paytida)
     shakeForm() {
         const form = document.querySelector('.login-form');
         if (form) {
@@ -164,16 +148,13 @@ class LoginUI {
         }
     }
 
-    // Foydalanuvchi ma'lumotlarini ko'rsatish
     showUserInfo() {
-        // Agar sessiya mavjud bo'lsa, ma'lumotlarni ko'rsatish
         if (authManager.isSessionValid()) {
             const user = authManager.getCurrentUser();
             console.log('Current user:', user);
         }
     }
 
-    // Parolni ko'rsatish/yashirish
     togglePasswordVisibility() {
         const passwordInput = document.getElementById('password');
         if (passwordInput) {
@@ -183,7 +164,6 @@ class LoginUI {
     }
 }
 
-// CSS animatsiyalari
 const style = document.createElement('style');
 style.textContent = `
     @keyframes shake {
@@ -237,7 +217,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// DOM ready bo'lganda ishga tushirish
 document.addEventListener('DOMContentLoaded', () => {
     window.loginUI = new LoginUI();
 });

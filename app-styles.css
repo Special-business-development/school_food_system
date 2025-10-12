@@ -1,6 +1,5 @@
 /* app-styles.css - Asosiy ilova stillari */
 
-/* Asosiy stillar */
 :root {
     --primary: #667eea;
     --primary-dark: #764ba2;
@@ -41,7 +40,6 @@ body {
     overflow: hidden;
 }
 
-/* Header */
 .header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: var(--white);
@@ -79,7 +77,6 @@ body {
     background: rgba(255,255,255,0.3);
 }
 
-/* Calculator Section */
 .calculator {
     padding: 20px;
     background: var(--white);
@@ -183,7 +180,6 @@ body {
     margin-top: 15px;
 }
 
-/* Loading */
 .loading {
     text-align: center;
     padding: 40px 20px;
@@ -205,7 +201,6 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Results */
 .results {
     display: none;
     padding: 0 20px 20px;
@@ -222,7 +217,6 @@ body {
     gap: 8px;
 }
 
-/* Summary */
 .summary {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: var(--white);
@@ -256,7 +250,6 @@ body {
     opacity: 0.9;
 }
 
-/* Period Info */
 .period-info {
     background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
     padding: 15px;
@@ -267,7 +260,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* Meal Plan */
 .days-container {
     display: grid;
     gap: 15px;
@@ -353,7 +345,6 @@ body {
     transform: translateX(3px);
 }
 
-/* Products Table */
 .products-table-container {
     overflow-x: auto;
     margin-bottom: 20px;
@@ -392,7 +383,6 @@ body {
     border-bottom: none;
 }
 
-/* No Data */
 .no-data {
     text-align: center;
     padding: 30px 20px;
@@ -401,7 +391,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* Date Selection */
 .date-selection {
     background: var(--light);
     padding: 15px;
@@ -449,7 +438,6 @@ body {
     width: 100%;
 }
 
-/* Responsive */
 @media (min-width: 768px) {
     body {
         padding: 20px;

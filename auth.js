@@ -20,29 +20,24 @@ class AuthManager {
         };
         
         this.currentUser = null;
-        this.selectedUserType = 'manager'; // Default
+        this.selectedUserType = 'manager';
         this.init();
     }
 
     init() {
-        // Sessiyani tekshirish
         this.checkExistingSession();
-        // Default user type tanlash
         this.selectUserType('manager');
     }
 
-    // Foydalanuvchi turini tanlash
     selectUserType(type) {
         this.selectedUserType = type;
         
-        // UI ni yangilash
         document.querySelectorAll('.user-option').forEach(option => {
             option.classList.remove('selected');
         });
         
         document.querySelector(`.user-option:nth-child(${type === 'manager' ? 1 : 2})`).classList.add('selected');
         
-        // Placeholder ni yangilash
         const usernameInput = document.getElementById('username');
         if (usernameInput) {
             if (type === 'manager') {
@@ -53,32 +48,27 @@ class AuthManager {
         }
     }
 
-    // Login qilish
     async login(username, password) {
         const credentials = this.userCredentials[this.selectedUserType];
         
         if (username === credentials.username && password === credentials.password) {
-            // Muvaffaqiyatli login
             this.currentUser = {
                 type: this.selectedUserType,
                 username: username,
                 role: credentials.role,
                 displayName: credentials.displayName,
-                appScriptUrl: credentials.appScriptUrl, // App Script URL ni saqlaymiz
+                appScriptUrl: credentials.appScriptUrl,
                 loginTime: new Date()
             };
             
-            // Sessiyani saqlash
             this.saveSession();
             
-            // app.html ga yo'naltirish
             return {
                 success: true,
                 redirectUrl: 'app.html',
                 user: this.currentUser
             };
         } else {
-            // Login muvaffaqiyatsiz
             return {
                 success: false,
                 error: 'Noto‘g‘ri login yoki parol!'
@@ -86,7 +76,6 @@ class AuthManager {
         }
     }
 
-    // Sessiyani saqlash
     saveSession() {
         const sessionData = {
             user: this.currentUser,
@@ -97,7 +86,6 @@ class AuthManager {
         sessionStorage.setItem('oshxona_session', JSON.stringify(sessionData));
     }
 
-    // Mavjud sessiyani tekshirish
     checkExistingSession() {
         const sessionData = localStorage.getItem('oshxona_session') || sessionStorage.getItem('oshxona_session');
         
@@ -105,13 +93,12 @@ class AuthManager {
             try {
                 const parsed = JSON.parse(sessionData);
                 const sessionAge = Date.now() - parsed.timestamp;
-                const maxAge = 24 * 60 * 60 * 1000; // 24 soat
+                const maxAge = 24 * 60 * 60 * 1000;
                 
                 if (sessionAge < maxAge) {
                     this.currentUser = parsed.user;
                     return true;
                 } else {
-                    // Sessiya muddati tugagan
                     this.logout();
                 }
             } catch (e) {
@@ -122,32 +109,25 @@ class AuthManager {
         return false;
     }
 
-    // Foydalanuvchi ma'lumotlarini olish
     getCurrentUser() {
         return this.currentUser;
     }
 
-    // App Script URL ni olish
     getAppScriptUrl() {
         return this.currentUser?.appScriptUrl || null;
     }
 
-    // Logout qilish
     logout() {
         this.currentUser = null;
         localStorage.removeItem('oshxona_session');
         sessionStorage.removeItem('oshxona_session');
-        
-        // Login sahifasiga qaytish
         window.location.href = 'index.html';
     }
 
-    // Sessiya muddatini tekshirish
     isSessionValid() {
         return this.currentUser !== null;
     }
 
-    // Foydalanuvchi huquqlarini tekshirish
     hasPermission(requiredRole) {
         if (!this.currentUser) return false;
         
@@ -160,5 +140,4 @@ class AuthManager {
     }
 }
 
-// Global auth instance
 window.authManager = new AuthManager();
