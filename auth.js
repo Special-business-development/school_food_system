@@ -5,14 +5,14 @@ class AuthManager {
         this.userCredentials = {
             manager: {
                 username: 'manager',
-                password: 'manager123',
+                password: 'manager777',
                 redirectUrl: 'https://script.google.com/macros/s/AKfycbw4yUYHuUy9RVmD9G92nu9Ky3-ZcYiTNlvXbNSjC511HQoRLB4gpYvb6caG_8RFbmT5Wg/exec',
                 role: 'manager',
                 displayName: 'Xo\'jalik Mudiri'
             },
             staff: {
                 username: 'staff', 
-                password: 'staff123',
+                password: 'staff777',
                 redirectUrl: 'https://script.google.com/macros/s/AKfycby2HTCDvY5JLoM_Y2CyxNpzClujaWl573AzaXWJ9J3Kv2ydmRxWeDghhvz8rLEObNwGBg/exec',
                 role: 'staff',
                 displayName: 'Oshxona Xodimi'
